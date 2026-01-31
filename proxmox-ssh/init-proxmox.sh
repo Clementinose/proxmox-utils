@@ -12,17 +12,23 @@ fi
 PUBKEY="$1"
 
 # Installera sudo och openssh-server om det inte finns
+echo "🔹 Installing SSH server and sudo if missing..."
 apt update
 apt install -y sudo openssh-server
 
 # Skapa user och lägg till sudo
-useradd -m -s /bin/bash "$USERNAME" 2>/dev/null || echo "User $USERNAME exists"
+if id "$USERNAME" &>/dev/null; then
+    echo "⚠️ User $USERNAME already exists"
+else
+    useradd -m -s /bin/bash "$USERNAME"
+    echo "✅ User $USERNAME created"
+fi
 usermod -aG sudo "$USERNAME"
 
-# Skapa .ssh-mapp och authorized_keys
+# Skapa .ssh-mapp och lägg till nyckeln om den inte finns
 mkdir -p /home/$USERNAME/.ssh
 chmod 700 /home/$USERNAME/.ssh
-echo "$PUBKEY" > /home/$USERNAME/.ssh/authorized_keys
+grep -qxF "$PUBKEY" /home/$USERNAME/.ssh/authorized_keys 2>/dev/null || echo "$PUBKEY" >> /home/$USERNAME/.ssh/authorized_keys
 chmod 600 /home/$USERNAME/.ssh/authorized_keys
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
 
