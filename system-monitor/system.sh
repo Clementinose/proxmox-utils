@@ -14,42 +14,33 @@ echo "IP:       $IP"
 echo "==============================="
 
 # CPU info
-CPU_MODEL=$(lscpu | grep "Model name" | awk -F: '{print $2}' | sed 's/^[ \t]*//')
+CPU_MODEL=$(lscpu | awk -F: '/Model name/ {print $2}' | xargs)
 CPU_CORES=$(nproc)
-CPU_FREQ=$(lscpu | grep "MHz" | awk -F: '{print $2}' | sed 's/^[ \t]*//')
-CPU_FLAGS=$(lscpu | grep "Flags" | awk -F: '{print $2}')
+CPU_FREQ=$(lscpu | awk -F: '/CPU MHz/ {print $2 " MHz"}' | xargs)
+CPU_FLAGS=$(lscpu | awk -F: '/Flags/ {print $2}' | xargs)
 echo "CPU:       $CPU_MODEL"
 echo "Cores:     $CPU_CORES"
-echo "Frequency: ${CPU_FREQ} MHz"
+echo "Frequency: $CPU_FREQ"
 echo "Flags:     $CPU_FLAGS"
 echo "-------------------------------"
 
 # RAM info
-TOTAL_RAM=$(free -h | awk '/^Mem:/ {print $2}')
-USED_RAM=$(free -h | awk '/^Mem:/ {print $3}')
-FREE_RAM=$(free -h | awk '/^Mem:/ {print $4}')
+read TOTAL_RAM USED_RAM FREE_RAM <<<$(free -h | awk '/^Mem:/ {print $2, $3, $4}')
 echo "RAM Total: $TOTAL_RAM | Used: $USED_RAM | Free: $FREE_RAM"
 echo "-------------------------------"
 
 # Swap info
-TOTAL_SWAP=$(free -h | awk '/^Swap:/ {print $2}')
-USED_SWAP=$(free -h | awk '/^Swap:/ {print $3}')
-FREE_SWAP=$(free -h | awk '/^Swap:/ {print $4}')
+read TOTAL_SWAP USED_SWAP FREE_SWAP <<<$(free -h | awk '/^Swap:/ {print $2, $3, $4}')
 echo "Swap Total: $TOTAL_SWAP | Used: $USED_SWAP | Free: $FREE_SWAP"
 echo "-------------------------------"
 
 # Disk info
-df -h --total | grep total | awk '{print "Disk Total: "$2" | Used: "$3" | Free: "$4}'
+df -h --total | awk '/total/ {print "Disk Total: "$2" | Used: "$3" | Free: "$4}'
 echo "-------------------------------"
 
 # GPU info
-if command -v lspci &>/dev/null; then
-    GPU_INFO=$(lspci | grep -E "VGA|3D")
-    echo "GPU Info:"
-    echo "$GPU_INFO"
-else
-    echo "GPU Info: Not available"
-fi
+GPU_INFO=$(lspci 2>/dev/null | grep -E "VGA|3D" || echo "Not available")
+echo "GPU Info: $GPU_INFO"
 echo "-------------------------------"
 
 # Motherboard & BIOS info
@@ -64,16 +55,17 @@ else
 fi
 echo "-------------------------------"
 
-# Network interfaces
+# Network interfaces (filter out virtual/non-physical like bonding_masters, docker, veth)
 echo "Network interfaces:"
-for IFACE in $(ls /sys/class/net | grep -v lo); do
+for IFACE in $(ls /sys/class/net | grep -Ev "lo|bonding_masters|veth|docker|br-"); do
     MAC=$(cat /sys/class/net/$IFACE/address)
-    IP_ADDR=$(ip -4 addr show $IFACE | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-    echo " $IFACE | MAC: $MAC | IP: ${IP_ADDR:-N/A}"
+    IPV4=$(ip -4 addr show $IFACE | awk '/inet / {print $2}' | cut -d/ -f1)
+    IPV6=$(ip -6 addr show $IFACE | awk '/inet6 / {print $2}' | cut -d/ -f1)
+    echo " $IFACE | MAC: $MAC | IPv4: ${IPV4:-N/A} | IPv6: ${IPV6:-N/A}"
 done
 echo "==============================="
 
-# Optional: top 5 CPU processes
+# Top 5 CPU processes
 echo "Top 5 CPU processes:"
 ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 6
 echo "==============================="
