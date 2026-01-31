@@ -19,7 +19,7 @@ echo "  / ____| | |                                   | |               (_)     
 echo " | |      | |   ___   _ __ ___     ___   _ __   | |_   ___         _   _ __     ___     "
 echo " | |      | |  / _ \ | '_ \` _ \   / _ \ | '_ \  | __| / __|       | | | '_ \   / __|    "
 echo " | |____  | | |  __/ | | | | | | |  __/ | | | | | |_  \__ \       | | | | | | | (__   _ "
-echo "  \_____| |_|  \___| |_| |_| |_|  \___| |_| |_|  \__| |___/       |_| |_| |_|  \___| (_)"
+echo "  \_____| |_|  \___| |_| |_| |_| \___| |_| |_|  \__| |___/       |_| |_| |_|  \___| (_)"
 echo -e "${RESET}"
 echo ""
 
@@ -31,7 +31,8 @@ echo -e "${GREEN}4)${RESET} Node Power Monitor"
 echo -e "${GREEN}5)${RESET} Node Temperature Monitor"
 echo -e "${GREEN}6)${RESET} Node Fan Monitor"
 echo -e "${GREEN}7)${RESET} Node Network Monitor"
-echo -e "${RED}8)${RESET} Exit"
+echo -e "${GREEN}8)${RESET} Node System Monitor"
+echo -e "${RED}9)${RESET} Exit"
 echo ""
 
 # Läs användarval
@@ -56,6 +57,7 @@ case "$choice" in
   5) run_script "Node Temperature Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/temp-monitor/temp.sh" ;;
   6) run_script "Node Fan Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/fan-monitor/fans.sh" ;;
   7) run_script "Node Network Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/network-monitor/network.sh" ;;
-  8) echo -e "${RED}👋 Hej då${RESET}" ; exit 0 ;;
+  8) run_script "Node System Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/system-monitor/system.sh" ;;
+  9) echo -e "${RED}👋 Hej då${RESET}" ; exit 0 ;;
   *) echo -e "${RED}❌ Fel val${RESET}" ;;
 esac
