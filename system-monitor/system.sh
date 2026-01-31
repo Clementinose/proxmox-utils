@@ -1,5 +1,5 @@
 #!/bin/bash
-# Node Full System Monitor – CPU, RAM, Disk, Network, GPU, Motherboard
+# Node Full System Monitor – CPU, RAM, Disk, Network, GPU, Motherboard, Memory Channels
 
 clear
 echo "==============================="
@@ -18,19 +18,27 @@ CPU_MODEL=$(lscpu | awk -F: '/Model name/ {print $2}' | xargs)
 CPU_CORES=$(nproc)
 CPU_FREQ=$(lscpu | awk -F: '/CPU MHz/ {print $2 " MHz"}' | xargs)
 CPU_FLAGS=$(lscpu | awk -F: '/Flags/ {print $2}' | xargs)
+CPU_SOCKETS=$(lscpu | awk -F: '/Socket/ {print $2}' | xargs)
 echo "CPU:       $CPU_MODEL"
 echo "Cores:     $CPU_CORES"
+echo "Sockets:   $CPU_SOCKETS"
 echo "Frequency: $CPU_FREQ"
 echo "Flags:     $CPU_FLAGS"
 echo "-------------------------------"
 
 # RAM info
-read TOTAL_RAM USED_RAM FREE_RAM <<<$(free -h | awk '/^Mem:/ {print $2, $3, $4}')
+TOTAL_RAM=$(free -h | awk '/^Mem:/ {print $2}')
+USED_RAM=$(free -h | awk '/^Mem:/ {print $3}')
+FREE_RAM=$(free -h | awk '/^Mem:/ {print $4}')
+RAM_CHANNELS=$(dmidecode -t memory 2>/dev/null | grep "Locator:" | wc -l)
 echo "RAM Total: $TOTAL_RAM | Used: $USED_RAM | Free: $FREE_RAM"
+echo "Memory Channels: $RAM_CHANNELS"
 echo "-------------------------------"
 
 # Swap info
-read TOTAL_SWAP USED_SWAP FREE_SWAP <<<$(free -h | awk '/^Swap:/ {print $2, $3, $4}')
+TOTAL_SWAP=$(free -h | awk '/^Swap:/ {print $2}')
+USED_SWAP=$(free -h | awk '/^Swap:/ {print $3}')
+FREE_SWAP=$(free -h | awk '/^Swap:/ {print $4}')
 echo "Swap Total: $TOTAL_SWAP | Used: $USED_SWAP | Free: $FREE_SWAP"
 echo "-------------------------------"
 
@@ -55,7 +63,7 @@ else
 fi
 echo "-------------------------------"
 
-# Network interfaces (filter out virtual/non-physical like bonding_masters, docker, veth)
+# Network interfaces (filter virtual interfaces)
 echo "Network interfaces:"
 for IFACE in $(ls /sys/class/net | grep -Ev "lo|bonding_masters|veth|docker|br-"); do
     MAC=$(cat /sys/class/net/$IFACE/address)
@@ -65,7 +73,7 @@ for IFACE in $(ls /sys/class/net | grep -Ev "lo|bonding_masters|veth|docker|br-"
 done
 echo "==============================="
 
-# Top 5 CPU processes
+# Optional: top 5 CPU processes
 echo "Top 5 CPU processes:"
 ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 6
 echo "==============================="
