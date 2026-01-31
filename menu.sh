@@ -21,27 +21,27 @@ PUBKEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINr2Lm9pY8GLLgaPvmD+kbNKsQdJuKdHfa6a
 case "$choice" in
   1)
     echo "▶ Kör LXC SSH setup..."
-    bash ./lxc-ssh/init.sh "$PUBKEY"
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/lxc-ssh/init.sh) "$PUBKEY"
     ;;
   2)
     echo "▶ Kör Proxmox SSH setup..."
-    bash ./proxmox-ssh/init-proxmox.sh "$PUBKEY"
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox.sh) "$PUBKEY"
     ;;
   3)
     echo "▶ Kör Node Power Monitor..."
-    bash ./power-monitor/monitor.sh
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/power-monitor/monitor.sh)
     ;;
   4)
     echo "▶ Kör Node Temperature Monitor..."
-    bash ./temp-monitor/temp.sh
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/temp-monitor/temp.sh)
     ;;
   5)
     echo "▶ Kör Node Fan Monitor..."
-    bash ./fan-monitor/fans.sh
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/fan-monitor/fans.sh)
     ;;
   6)
     echo "▶ Kör Node Network Monitor..."
-    bash ./network-monitor/network.sh
+    bash <(curl -fsSL https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/network-monitor/network.sh)
     ;;
   7)
     echo "👋 Hej då"
