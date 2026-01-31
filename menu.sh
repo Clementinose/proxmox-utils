@@ -24,15 +24,16 @@ echo -e "${RESET}"
 echo ""
 
 # Menyalternativ
-echo -e "${GREEN}1)${RESET} LXC SSH setup"
-echo -e "${GREEN}2)${RESET} Proxmox SSH setup (clements)"
-echo -e "${GREEN}3)${RESET} Proxmox SSH setup (root)"
-echo -e "${GREEN}4)${RESET} Node Power Monitor"
-echo -e "${GREEN}5)${RESET} Node Temperature Monitor"
-echo -e "${GREEN}6)${RESET} Node Fan Monitor"
-echo -e "${GREEN}7)${RESET} Node Network Monitor"
-echo -e "${GREEN}8)${RESET} Node System Monitor"
-echo -e "${RED}9)${RESET} Exit"
+echo -e "${GREEN}1)${RESET} LXC SSH setup (user)"
+echo -e "${GREEN}2)${RESET} LXC SSH setup (root)"
+echo -e "${GREEN}3)${RESET} Proxmox SSH setup (clements)"
+echo -e "${GREEN}4)${RESET} Proxmox SSH setup (root)"
+echo -e "${GREEN}5)${RESET} Node Power Monitor"
+echo -e "${GREEN}6)${RESET} Node Temperature Monitor"
+echo -e "${GREEN}7)${RESET} Node Fan Monitor"
+echo -e "${GREEN}8)${RESET} Node Network Monitor"
+echo -e "${GREEN}9)${RESET} Node System Monitor"
+echo -e "${RED}10)${RESET} Exit"
 echo ""
 
 # Läs användarval
@@ -50,14 +51,15 @@ run_script() {
 
 # Kör användarval
 case "$choice" in
-  1) run_script "LXC SSH setup" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/lxc-ssh/init.sh" ;;
-  2) run_script "Proxmox SSH setup (clements)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox.sh" ;;
-  3) run_script "Proxmox SSH setup (root)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox-root.sh" ;;
-  4) run_script "Node Power Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/power-monitor/monitor.sh" ;;
-  5) run_script "Node Temperature Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/temp-monitor/temp.sh" ;;
-  6) run_script "Node Fan Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/fan-monitor/fans.sh" ;;
-  7) run_script "Node Network Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/network-monitor/network.sh" ;;
-  8) run_script "Node System Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/system-monitor/system.sh" ;;
-  9) echo -e "${RED}👋 Hej då${RESET}" ; exit 0 ;;
+  1) run_script "LXC SSH setup (user)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/lxc-ssh/init.sh" ;;
+  2) run_script "LXC SSH setup (root)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/lxc-ssh/lxc-ssh-root.sh" ;;
+  3) run_script "Proxmox SSH setup (clements)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox.sh" ;;
+  4) run_script "Proxmox SSH setup (root)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox-root.sh" ;;
+  5) run_script "Node Power Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/power-monitor/monitor.sh" ;;
+  6) run_script "Node Temperature Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/temp-monitor/temp.sh" ;;
+  7) run_script "Node Fan Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/fan-monitor/fans.sh" ;;
+  8) run_script "Node Network Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/network-monitor/network.sh" ;;
+  9) run_script "Node System Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/system-monitor/system.sh" ;;
+  10) echo -e "${RED}👋 Hej då${RESET}" ; exit 0 ;;
   *) echo -e "${RED}❌ Fel val${RESET}" ;;
 esac
