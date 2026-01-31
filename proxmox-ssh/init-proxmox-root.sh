@@ -3,7 +3,7 @@ set -e
 
 # Root SSH setup script
 # Author: Clementinose
-# Purpose: Add a public SSH key to root's authorized_keys
+# Purpose: Add a public SSH key to root's authorized_keys (safe, preserves existing keys)
 
 if [ -z "$1" ]; then
   echo "❌ No SSH public key provided"
@@ -22,8 +22,8 @@ apt install -y openssh-server
 mkdir -p /root/.ssh
 chmod 700 /root/.ssh
 
-# Add the public key to authorized_keys
-echo "$PUBKEY" > /root/.ssh/authorized_keys
+# Add the key if it's not already present
+grep -qxF "$PUBKEY" /root/.ssh/authorized_keys 2>/dev/null || echo "$PUBKEY" >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 
 # Enable and restart SSH service
