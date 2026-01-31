@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+# User SSH setup script (safe, preserves existing keys)
 USERNAME="clements"
 
 # Kontrollera att SSH public key skickas med
@@ -39,7 +40,9 @@ usermod -aG sudo "$USERNAME"
 # Skapa .ssh-mapp och authorized_keys
 mkdir -p /home/$USERNAME/.ssh
 chmod 700 /home/$USERNAME/.ssh
-echo "$PUBKEY" > /home/$USERNAME/.ssh/authorized_keys
+
+# Lägg till SSH-nyckeln om den inte redan finns
+grep -qxF "$PUBKEY" /home/$USERNAME/.ssh/authorized_keys 2>/dev/null || echo "$PUBKEY" >> /home/$USERNAME/.ssh/authorized_keys
 chmod 600 /home/$USERNAME/.ssh/authorized_keys
 chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
 
