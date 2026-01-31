@@ -41,13 +41,13 @@ run_script() {
 }
 
 case "$choice" in
-  1) run_script "LXC SSH setup" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/lxc-ssh/init.sh" ;;
-  2) run_script "Proxmox SSH setup (clements)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/proxmox-ssh/init-proxmox.sh" ;;
-  3) run_script "Proxmox SSH setup (root)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/proxmox-ssh/init-proxmox-root.sh" ;;
-  4) run_script "Node Power Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/power-monitor/monitor.sh" ;;
-  5) run_script "Node Temperature Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/temp-monitor/temp.sh" ;;
-  6) run_script "Node Fan Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/fan-monitor/fans.sh" ;;
-  7) run_script "Node Network Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/cool-menu-ui/network-monitor/network.sh" ;;
+  1) run_script "LXC SSH setup" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/lxc-ssh/init.sh" ;;
+  2) run_script "Proxmox SSH setup (clements)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox.sh" ;;
+  3) run_script "Proxmox SSH setup (root)" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/proxmox-ssh/init-proxmox-root.sh" ;;
+  4) run_script "Node Power Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/power-monitor/monitor.sh" ;;
+  5) run_script "Node Temperature Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/temp-monitor/temp.sh" ;;
+  6) run_script "Node Fan Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/fan-monitor/fans.sh" ;;
+  7) run_script "Node Network Monitor" "https://raw.githubusercontent.com/Clementinose/proxmox-utils/main/network-monitor/network.sh" ;;
   8) echo -e "${RED}👋 Hej då${RESET}" ; exit 0 ;;
   *) echo -e "${RED}❌ Fel val${RESET}" ;;
 esac
