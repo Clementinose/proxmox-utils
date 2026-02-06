@@ -12,27 +12,28 @@ fi
 
 PUBKEY="$1"
 
-# Installera OpenSSH server om det inte finns
+# Installera sudo och OpenSSH server om de inte finns
 if ! dpkg -l | grep -qw openssh-server; then
     echo "🔹 Installing OpenSSH server..."
     apt update
     apt install -y openssh-server
 fi
 
-# Skapa .ssh-mapp för root om den inte finns
+# Skapa .ssh-mapp för root
 mkdir -p /root/.ssh
 chmod 700 /root/.ssh
 
-# Lägg till key om den inte redan finns
+# Lägg till SSH-nyckeln om den inte redan finns
 grep -qxF "$PUBKEY" /root/.ssh/authorized_keys 2>/dev/null || echo "$PUBKEY" >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 
-# Aktivera och starta om SSH-tjänsten
+# Starta om SSH-tjänsten
 systemctl enable ssh
 systemctl restart ssh
 
 # Visa resultat
-echo "✅ Done: root now has SSH access via the provided key"
+echo "✅ Done: root SSH key installed"
 echo "🖥 Hostname: $(hostname)"
 IP=$(hostname -I | awk '{print $1}')
 echo "🌐 IP: $IP"
+echo "ℹ Root SSH login is enabled (key-based)"
